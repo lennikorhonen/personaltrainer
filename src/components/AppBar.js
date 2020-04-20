@@ -55,11 +55,11 @@ export default function Bars() {
         </div>
         <Divider />
         <List>
-          <ListItem button component={Link} to='/' onClick={Customerlist} >
+          <ListItem button component={Link} to='/' onClick={() => Customerlist} >
             <ListItemIcon><AccountBoxIcon /></ListItemIcon>
             <ListItemText primary='Customers' />
           </ListItem>
-          <ListItem button component={Link} to='/trainings' onClick={Traininglist} >
+          <ListItem button component={Link} to='/trainings' onClick={() => Traininglist} >
             <ListItemIcon><DirectionsRunIcon /></ListItemIcon>
             <ListItemText primary='Trainings' />
           </ListItem>

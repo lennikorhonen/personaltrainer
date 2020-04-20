@@ -25,10 +25,6 @@ export default function Traininglist() {
         getTrainings();
     },[])
 
-    useEffect(() =>{
-        getCustomer();
-    })
-
     const getTrainings = () => {
         fetch('https://customerrest.herokuapp.com/api/trainings')
         .then(response => response.json())
