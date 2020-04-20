@@ -1,4 +1,5 @@
 import React, { useState, useEffect, forwardRef } from 'react';
+import Moment from 'moment';
 import MaterialTable from 'material-table';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
@@ -15,15 +16,15 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import moment from 'moment';
 
 export default function Traininglist() {
-    const [trainings, setTrainings] = useState([])
-
-    const [customer, setCustomer] = useState([]);
+    const [trainings, setTrainings] = useState([]);
 
     useEffect(() => {
         getTrainings();
     },[])
+
 
     const getTrainings = () => {
         fetch('https://customerrest.herokuapp.com/api/trainings')
@@ -31,15 +32,6 @@ export default function Traininglist() {
         .then(data => setTrainings(data.content))
         .catch(err => console.error(err))
     }
-
-    const getCustomer = () => {
-        fetch('https://customerrest.herokuapp.com/api/trainings')
-        .then(response => response.json())
-        .then(data => setCustomer(data.content.links.href))
-        .catch(err => console.error(err))
-        console.log(customer)
-    }
-    
 
     const tableIcons = {
         Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -68,19 +60,16 @@ export default function Traininglist() {
         },
         {
             title: 'Date',
-            field: 'date'
+            field: 'date',
+            render: row => moment(row.date).format('DD/MM/YYYY HH:mm')
         },
         {
             title: 'Duration',
             field: 'duration'
         },
         {
-            title: 'Activity',
-            field: 'activity'
-        },
-        {
             title: 'Customer',
-            field: ''
+            field: 'links[2].href'
         }
     ]
 
