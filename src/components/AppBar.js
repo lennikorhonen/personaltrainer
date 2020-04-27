@@ -8,6 +8,9 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Customerlist from './Customerlist';
 import Traininglist from './Traininglist';
+import Calendar from './Calendar';
+import TodayIcon from '@material-ui/icons/Today';
+
 
 export default function Bars() {
 
@@ -62,6 +65,10 @@ export default function Bars() {
           <ListItem button component={Link} to='/trainings' onClick={() => Traininglist} >
             <ListItemIcon><DirectionsRunIcon /></ListItemIcon>
             <ListItemText primary='Trainings' />
+          </ListItem>
+          <ListItem button component={Link} to='/calendar' onClick={() => Calendar()}>
+            <ListItemIcon><TodayIcon /></ListItemIcon>
+            <ListItemText primary='Calendar'></ListItemText>
           </ListItem>
         </List>
       </Drawer>

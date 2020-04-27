@@ -1,5 +1,4 @@
 import React, { useState, useEffect, forwardRef } from 'react';
-import Moment from 'moment';
 import MaterialTable from 'material-table';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
@@ -17,9 +16,13 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import moment from 'moment';
+import Delete from '@material-ui/icons/Delete';
+import Snackbar from '@material-ui/core/Snackbar';
 
 export default function Traininglist() {
     const [trainings, setTrainings] = useState([]);
+    const [open, setOpen] = useState(false);
+    const [msg, setMsg] = useState('');
 
     useEffect(() => {
         getTrainings();
@@ -27,10 +30,22 @@ export default function Traininglist() {
 
 
     const getTrainings = () => {
-        fetch('https://customerrest.herokuapp.com/api/trainings')
+        fetch('https://customerrest.herokuapp.com/gettrainings')
         .then(response => response.json())
-        .then(data => setTrainings(data.content))
+        .then(data => setTrainings(data))
         .catch(err => console.error(err))
+    }
+
+    const deleteTraining = (link) => {
+        if(window.confirm('Are you sure')){
+            fetch(link, {method: 'DELETE'})
+            .then(_ => getTrainings())
+            .then(_ => {
+                setMsg('Training deleted')
+                setOpen(true)
+            })
+            .catch(err => console.error(err))
+        }
     }
 
     const tableIcons = {
@@ -69,9 +84,13 @@ export default function Traininglist() {
         },
         {
             title: 'Customer',
-            field: 'links[2].href'
+            field: 'customer.firstname'
         }
     ]
+
+    const handleClose = () => {
+        setOpen(false);
+    }
 
     return(
         <div style={{ maxWidth: "100%", margin: 15 }}>
@@ -79,7 +98,26 @@ export default function Traininglist() {
             icons={tableIcons}
             title="Trainings"
             columns={columns}
-            data={trainings} />
+            data={trainings}
+            actions={[
+                {
+                    icon: () => <Delete></Delete>,
+                    tooltip: 'Delete training',
+                    onClick: (event, row) => {
+                        deleteTraining(row.links[0].href)
+                    }
+                }
+            ]} />
+        <Snackbar
+            open={open}
+            autoHideDuration={3000}
+            message={msg}
+            onClose={handleClose}
+            anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+        />
     </div>
     );
 }

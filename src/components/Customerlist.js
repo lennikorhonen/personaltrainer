@@ -16,6 +16,7 @@ import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import Snackbar from '@material-ui/core/Snackbar';
 import Delete from '@material-ui/icons/Delete';
+import Button from '@material-ui/core/Button';
 
 export default function Customerlist() {
     const [customers, setCustomers] = useState([]);
@@ -49,7 +50,7 @@ export default function Customerlist() {
         fetch('https://customerrest.herokuapp.com/api/customers',
         {
             method: 'POST',
-            header: 'Content-Type: application/json',
+            headers: {'Content-Type':'application/json'},
             body: JSON.stringify(customer)
         })
         .then(_ => getCustomers())
@@ -63,7 +64,7 @@ export default function Customerlist() {
     const updateCustomer = (link, customer) => {
         fetch(link, {
             method: 'PUT',
-            header: 'Content-Type: application/json',
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(customer)
         })
         .then(_=> getCustomers())
@@ -94,38 +95,36 @@ export default function Customerlist() {
         ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
     };
 
-    const [state, setState] = useState({
-        columns: [
-            {
-                title: 'Firstname',
-                field: 'firstname'
-            },
-            {
-                title: 'Lastname',
-                field: 'lastname'
-            },
-            {
-                title: 'Email',
-                field: 'email'
-            },
-            {
-                title: 'Phone',
-                field: 'phone'
-            },
-            {
-                title: 'Address',
-                field: 'streetaddress'
-            },
-            {
-                title: 'Postcode',
-                field: 'postcode'
-            },
-            {
-                title: 'City',
-                field: 'city'
-            }
-        ]
-    })
+    const columns = [
+        {
+            title: 'Firstname',
+            field: 'firstname'
+        },
+        {
+            title: 'Lastname',
+            field: 'lastname'
+        },
+        {
+            title: 'Email',
+            field: 'email'
+        },
+        {
+            title: 'Phone',
+            field: 'phone'
+        },
+        {
+            title: 'Address',
+            field: 'streetaddress'
+        },
+        {
+            title: 'Postcode',
+            field: 'postcode'
+        },
+        {
+            title: 'City',
+            field: 'city'
+        }
+    ]
 
     const handleClose = () => {
         setOpen(false);
@@ -136,8 +135,23 @@ export default function Customerlist() {
         <MaterialTable
             icons={tableIcons}
             title="Customers"
-            columns={state.columns}
+            columns={columns}
             data={customers}
+            editable={{
+                onRowAdd: newCustomer =>
+                    new Promise((resolve) => {
+                        addCustomer(newCustomer);
+                        resolve();
+                    }),
+                onRowUpdate: (newCustomer, oldCustomer) =>
+                    new Promise((resolve) => {
+                        updateCustomer(newCustomer);
+                        const data = customers;
+                        const index = data.indexOf(oldCustomer)
+                        data[index] = newCustomer;
+                        resolve();
+                    })
+            }}
             actions={[
                 {
                     icon: () => <Delete></Delete>,
@@ -145,28 +159,8 @@ export default function Customerlist() {
                     onClick: (event, row) => {
                         deleteCustomer(row.links[0].href)
                     } 
-                },
-                {
-                    icon: () => <Edit></Edit>,
-                    tooltip: 'Edit cutomer',
-                    onClick: (event, row) => {
-                        updateCustomer(row)
-                    }
                 }
             ]}
-            editable={{
-                onRowAdd: newCustomer =>
-                    new Promise((resolve, reject) => {
-                        setTimeout(() => {
-                            {
-                                const data = customers;
-                                data.push(newCustomer);
-                                setState({ data }, () => resolve());
-                            }
-                            resolve()
-                        }, 1000)
-                    })
-            }}
             />
         <Snackbar
             open={open}
