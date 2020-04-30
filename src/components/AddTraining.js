@@ -4,7 +4,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { MuiPickersUtilsProvider, DateTimePicker } from "@material-ui/pickers";
-import 'date-fns';
+import DateFnsUtils from '@date-io/date-fns';
 
 
 export default function AddTraining(props) {
@@ -44,25 +44,25 @@ export default function AddTraining(props) {
             <DialogContent>
             <TextField 
                 margin='dense'
-                id='date'
-                name='date'
-                value={training.date}
+                id='activity'
+                name='activity'
+                value={training.activity}
                 onChange={inputChanged}
-                label='Date'
+                label='Activity'
                 fullWidth
             />
-            <MuiPickersUtilsProvider>
-            <Fragment>
-                <DateTimePicker
-                    ampm='false'
-                    margin='dense'
-                    id='date'
-                    name='date'
-                    value={selectedDate}
-                    onChange={handleDateChange}
-                    label='Date'
-                    fullWidth/>
-            </Fragment>
+            <MuiPickersUtilsProvider utils={DateFnsUtils} >
+                <Fragment>
+                    <DateTimePicker
+                        ampm='false'
+                        margin='dense'
+                        id='date'
+                        name='date'
+                        value={selectedDate}
+                        onChange={handleDateChange}
+                        label='Date'
+                        fullWidth/>
+                </Fragment>
             </MuiPickersUtilsProvider>
             <TextField
                 margin='dense'

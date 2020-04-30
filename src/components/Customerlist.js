@@ -125,7 +125,8 @@ export default function Customerlist() {
 
     const columns = [
         {
-            render: (row) => (<AddTraining trainings={row} addTraining={addTraining} />)
+            render: (row) => (<AddTraining trainings={row.links[0]} addTraining={addTraining}
+                {...console.log(row.links[0].href)} />)
         },
         {
             title: 'Firstname',
