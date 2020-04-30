@@ -16,16 +16,22 @@ import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import Snackbar from '@material-ui/core/Snackbar';
 import Delete from '@material-ui/icons/Delete';
-import Button from '@material-ui/core/Button';
+import AddTraining from './AddTraining';
+
 
 export default function Customerlist() {
     const [customers, setCustomers] = useState([]);
     const [open, setOpen] = useState(false);
     const [msg, setMsg] = useState('');
+    const [trainings, setTrainings] = useState([]);
 
     useEffect(() => {
         getCustomers();
     },[])
+
+    useEffect(() => {
+        getTrainings();
+    }, [])
 
     const getCustomers = () => {
         fetch('https://customerrest.herokuapp.com/api/customers')
@@ -33,6 +39,13 @@ export default function Customerlist() {
         .then(data => setCustomers(data.content))
         .catch(err => console.error(err))
     };
+
+    const getTrainings = () => {
+        fetch('https://customerrest.herokuapp.com/gettrainings')
+        .then(response => response.json())
+        .then(data => setTrainings(data))
+        .catch(err => console.error(err))
+    }
 
     const deleteCustomer = (link) => {
         if (window.confirm('Are you sure?')){
@@ -61,8 +74,8 @@ export default function Customerlist() {
         .catch(err => console.error())
     }
 
-    const updateCustomer = (link, customer) => {
-        fetch(link, {
+    const updateCustomer = (customer) => {
+        fetch(customer.links[0].href, {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(customer)
@@ -73,6 +86,21 @@ export default function Customerlist() {
             setOpen(true)
         })
         .catch(err => console.error(err))
+    }
+
+    const addTraining = (training) => {
+        fetch('https://customerrest.herokuapp.com/api/trainigs',
+        {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body:  JSON.stringify(training)
+        })
+        .then(_ => getTrainings())
+        .then(_ => {
+            setMsg('New training added');
+            setOpen(true);
+        })
+        .catch(err => console.error(err));
     }
 
     const tableIcons = {
@@ -96,6 +124,9 @@ export default function Customerlist() {
     };
 
     const columns = [
+        {
+            render: (row) => (<AddTraining trainings={row} addTraining={addTraining} />)
+        },
         {
             title: 'Firstname',
             field: 'firstname'
@@ -145,10 +176,10 @@ export default function Customerlist() {
                     }),
                 onRowUpdate: (newCustomer, oldCustomer) =>
                     new Promise((resolve) => {
-                        updateCustomer(newCustomer);
                         const data = customers;
                         const index = data.indexOf(oldCustomer)
                         data[index] = newCustomer;
+                        updateCustomer(newCustomer);
                         resolve();
                     })
             }}
@@ -158,7 +189,7 @@ export default function Customerlist() {
                     tooltip: 'Delete user',
                     onClick: (event, row) => {
                         deleteCustomer(row.links[0].href)
-                    } 
+                    }
                 }
             ]}
             />
