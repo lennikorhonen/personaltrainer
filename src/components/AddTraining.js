@@ -5,19 +5,19 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { MuiPickersUtilsProvider, DateTimePicker } from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns';
+import moment from 'moment';
 
 
 export default function AddTraining(props) {
     const [open, setOpen] = useState(false);
-    const [training, setTraining] = useState({date: '', duration: '', activity: ''});
-    const [selectedDate, handleDateChange] = useState(new Date());
+    const [training, setTraining] = useState({date: '', duration: '', activity: '', customer: ''});
 
     const handleClickOpen = () => {
         setOpen(true);
     }
 
     const handleClose = () => {
-        props.addTraining(training);
+        props.addTraining(training, props.customer);
         setOpen(false);
     }
     const handleCancel = () => {
@@ -26,6 +26,10 @@ export default function AddTraining(props) {
 
     const inputChanged = (event) => {
         setTraining({...training, [event.target.name]: event.target.value})
+    }
+
+    const handleDateChange = (date) => {
+        setTraining({... training, date: moment(date._d).toISOString()})
     }
 
 
@@ -58,8 +62,8 @@ export default function AddTraining(props) {
                         margin='dense'
                         id='date'
                         name='date'
-                        value={selectedDate}
-                        onChange={handleDateChange}
+                        value={training.date}
+                        onChange = {(date) =>handleDateChange(date)}
                         label='Date'
                         fullWidth/>
                 </Fragment>

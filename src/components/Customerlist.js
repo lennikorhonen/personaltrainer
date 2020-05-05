@@ -23,7 +23,7 @@ export default function Customerlist() {
     const [customers, setCustomers] = useState([]);
     const [open, setOpen] = useState(false);
     const [msg, setMsg] = useState('');
-    const [trainings, setTrainings] = useState([]);
+    const [training, setTrainings] = useState([]);
 
     useEffect(() => {
         getCustomers();
@@ -60,6 +60,7 @@ export default function Customerlist() {
     }
 
     const addCustomer = (customer) => {
+        console.log(customer)
         fetch('https://customerrest.herokuapp.com/api/customers',
         {
             method: 'POST',
@@ -88,12 +89,19 @@ export default function Customerlist() {
         .catch(err => console.error(err))
     }
 
-    const addTraining = (training) => {
-        fetch('https://customerrest.herokuapp.com/api/trainigs',
+    const addTraining = (training, link) => {
+        console.log(training, link)
+        const newTraining = {
+            'date' : training.date,
+            'activity' : training.activity,
+            'duration' : training.duration,
+            'customer' : link
+        }
+        fetch('https://customerrest.herokuapp.com/api/trainings',
         {
             method: 'POST',
             headers: {'Content-Type':'application/json'},
-            body:  JSON.stringify(training)
+            body:  JSON.stringify(newTraining)
         })
         .then(_ => getTrainings())
         .then(_ => {
@@ -125,8 +133,8 @@ export default function Customerlist() {
 
     const columns = [
         {
-            render: (row) => (<AddTraining trainings={row.links[0]} addTraining={addTraining}
-                {...console.log(row.links[0].href)} />)
+            render: (row) => (<AddTraining trainings={row} addTraining={addTraining} customer={row.links[0].href}
+                 />)
         },
         {
             title: 'Firstname',

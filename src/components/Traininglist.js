@@ -23,11 +23,15 @@ export default function Traininglist() {
     const [trainings, setTrainings] = useState([]);
     const [open, setOpen] = useState(false);
     const [msg, setMsg] = useState('');
+    const [deletable, setDeletable] = useState([]);
 
     useEffect(() => {
         getTrainings();
     },[])
 
+    useEffect(() => {
+        getDelete();
+    })
 
     const getTrainings = () => {
         fetch('https://customerrest.herokuapp.com/gettrainings')
@@ -36,16 +40,23 @@ export default function Traininglist() {
         .catch(err => console.error(err))
     }
 
-    const deleteTraining = (link) => {
-        if(window.confirm('Are you sure')){
-            fetch(link, {method: 'DELETE'})
-            .then(_ => getTrainings())
-            .then(_ => {
-                setMsg('Training deleted')
-                setOpen(true)
-            })
-            .catch(err => console.error(err))
-        }
+    const getDelete = () => {
+        fetch('https://customerrest.herokuapp.com/api/trainings')
+        .then(response => response.json())
+        .then(data => setDeletable(data.content))
+        .catch(err => console.error(err))
+    }
+
+    const deleteTrainings = (link) => {
+        if(window.confirm('Are you sure'))
+        console.log(link)
+        fetch('https://customerrest.herokuapp.com/api/trainings', {method: 'DELETE'})
+        .then(_ => getDelete())
+        .then(_ => {
+            setMsg('Training deleted')
+            setOpen(true)
+        })
+        .catch(err => console.error(err))
     }
 
     const tableIcons = {
@@ -104,7 +115,7 @@ export default function Traininglist() {
                     icon: () => <Delete></Delete>,
                     tooltip: 'Delete training',
                     onClick: (event, row) => {
-                        deleteTraining(row.links[0].href)
+                        deleteTrainings(row.links[0].href)
                     }
                 }
             ]} />
