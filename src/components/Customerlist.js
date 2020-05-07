@@ -120,8 +120,9 @@ export default function Customerlist() {
 
     const columns = [
         {
-            render: (row) => (<AddTraining trainings={row} addTraining={addTraining} 
-                customer={row.links[0].href}/>)
+            editable: 'never',
+            field: 'links[0].href',
+            render: (row) => (<AddTraining addTraining={addTraining} customer={row}/>)
         },
         {
             title: 'Firstname',

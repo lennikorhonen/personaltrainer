@@ -29,7 +29,7 @@ export default function AddTraining(props) {
     }
 
     const handleDateChange = (date) => {
-        setTraining({... training, date: moment(date._d).toISOString()})
+        setTraining({...training, date: moment(date._d).toISOString()})
     }
 
 
@@ -63,7 +63,7 @@ export default function AddTraining(props) {
                         id='date'
                         name='date'
                         value={training.date}
-                        onChange = {(date) =>handleDateChange(date)}
+                        onChange = {(date) => handleDateChange(date)}
                         label='Date'
                         fullWidth/>
                 </Fragment>
