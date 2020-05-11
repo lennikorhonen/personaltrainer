@@ -75,6 +75,7 @@ export default function Bars() {
       <Switch>
         <Route exact path='/' component={Customerlist}/>
         <Route path='/trainings' component={Traininglist} />
+        <Route path='/calendar' component={Calendar} />
       </Switch>
       </BrowserRouter>
         </div>

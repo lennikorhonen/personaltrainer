@@ -7,7 +7,6 @@ import { MuiPickersUtilsProvider, DateTimePicker } from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns';
 import moment from 'moment';
 
-
 export default function AddTraining(props) {
     const [open, setOpen] = useState(false);
     const [training, setTraining] = useState({date: '', duration: '', activity: '', customer: ''});
@@ -20,6 +19,7 @@ export default function AddTraining(props) {
         props.addTraining(training, props.customer);
         setOpen(false);
     }
+    
     const handleCancel = () => {
         setOpen(false);
     }
@@ -31,7 +31,6 @@ export default function AddTraining(props) {
     const handleDateChange = (date) => {
         setTraining({...training, date: moment(date._d).toISOString()})
     }
-
 
     return(
         <div>

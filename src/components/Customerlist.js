@@ -16,10 +16,6 @@ export default function Customerlist() {
         getCustomers();
     },[])
 
-    useEffect(() => {
-        getTrainings();
-    }, [])
-
     const getCustomers = () => {
         fetch('https://customerrest.herokuapp.com/api/customers')
         .then(response => response.json())
@@ -77,12 +73,12 @@ export default function Customerlist() {
     }
 
     const addTraining = (training, link) => {
-        console.log(training, link)
+        console.log('link:' ,link)
         const newTraining = {
             'date' : training.date,
             'activity' : training.activity,
             'duration' : training.duration,
-            'customer' : link
+            'customer' : link.links[0].href
         }
         fetch('https://customerrest.herokuapp.com/api/trainings',
         {
