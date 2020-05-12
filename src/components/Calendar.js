@@ -4,11 +4,12 @@ import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 export default function TrainingCalendar() {
-    const localizer = momentLocalizer(moment)
-    const [trainings, setTrainings] = useState([])
+	const localizer = momentLocalizer(moment);
+	
+    const [trainings, setTrainings] = useState([]);
 
     useEffect(() => {
-      getTrainings()
+	  getTrainings()
     });
 
     const getTrainings = () => {
@@ -16,36 +17,31 @@ export default function TrainingCalendar() {
         .then(response => response.json())
         .then(data => setTrainings(data))
         .catch(err => console.error(err))
-        console.log('trainings:',trainings);
-    }
+	}
 
-    const eventList = trainings.map((training) => 
-      <tr key={training.id}>
-        <td>{training.activity}</td>
-        <td>{training.date}</td>
-        <td>{training.duration}</td>
-        <td>{training.customer.firstname}</td>
-      </tr>
-    );
-
-    console.log('events:', eventList);
-
-    const events = [
-      {
-        allDay: 'false',
-        title: eventList.activity,
-        start: eventList.date,
-        end: eventList.date + moment().add(eventList.duration, 'minutes')
-      }
-  ];
+	const events = trainings.map((training) => 
+		training =
+		{
+		  allDay: 'false',
+		  title: training.activity,
+		  start: training.date,
+		  end: training.date + moment().add(training.duration, 'minutes'),
+		  resource: training.customer.firstname
+		}
+	);
+	console.log('events:', events);
 
     return (
         <Calendar 
         localizer={localizer}
-        events={events}
+		events={events}
+		allDayAccessor="allDay"
+		titleAccessor='title'
+		resourceAccessor='resource'
         startAccessor='start'
         endAccessor='end'
-        views={['month', 'day', 'week']}
+        views={['month', 'week', 'day']}
         style={{height: 450}}
-        />)
+		/>
+	)
 }

@@ -9,7 +9,9 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Customerlist from './Customerlist';
 import Traininglist from './Traininglist';
 import Calendar from './Calendar';
+import Statistics from './Statistics';
 import TodayIcon from '@material-ui/icons/Today';
+import EqualizerIcon from '@material-ui/icons/Equalizer';
 
 
 export default function Bars() {
@@ -66,9 +68,14 @@ export default function Bars() {
             <ListItemIcon><DirectionsRunIcon /></ListItemIcon>
             <ListItemText primary='Trainings' />
           </ListItem>
-          <ListItem button component={Link} to='/calendar' onClick={() => Calendar()}>
-            <ListItemIcon><TodayIcon /></ListItemIcon>
-            <ListItemText primary='Calendar'></ListItemText>
+          <ListItem button component={Link} to='/calendar' onClick={() => Calendar} >
+            <ListItemIcon><AccountBoxIcon /></ListItemIcon>
+            <ListItemText primary='Calendar' />
+          </ListItem>
+          <Divider />
+          <ListItem button component={Link} to='/statistics' onClick={() => Statistics} >
+			<ListItemIcon><EqualizerIcon /></ListItemIcon>
+			<ListItemText primary='Statistics' />
           </ListItem>
         </List>
       </Drawer>
@@ -76,6 +83,7 @@ export default function Bars() {
         <Route exact path='/' component={Customerlist}/>
         <Route path='/trainings' component={Traininglist} />
         <Route path='/calendar' component={Calendar} />
+		<Route path='/statistics' component={Statistics} />
       </Switch>
       </BrowserRouter>
         </div>
