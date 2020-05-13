@@ -12,10 +12,10 @@ export default function Statistics() {
       const getTrainings = () => {
         fetch('https://customerrest.herokuapp.com/gettrainings')
           .then(response => response.json())
-          .then(data => setTrainings(lodash(data).groupBy('activity').map(function(duartion, activity) {
+          .then(data => setTrainings(lodash(data).groupBy('activity').map(function(duration, activity) {
               return {
                   name: activity,
-                  duration: lodash.sumBy(duartion, 'duartion')
+                  duration: lodash.sumBy(duration, 'duration')
               };
           }).value()))
           .catch(err => console.error(err))
@@ -33,7 +33,7 @@ export default function Statistics() {
         <XAxis dataKey="name" />
         <Tooltip value='Charts' />
         <CartesianGrid stroke="#f5f5f5" />
-        <Bar dataKey="uv" barSize={100} fill="#8884d8" label="name" />
+        <Bar dataKey="duration" barSize={100} fill="#8884d8" label="name" />
         <YAxis label={{ value: 'Duration (min)', angle: -90, position: 'insideLeft'}} />
       </BarChart>
     );
