@@ -19,25 +19,22 @@ export default function TrainingCalendar() {
         .catch(err => console.error(err))
 	}
 
-	const events = trainings.map((training) => 
-		training =
-		{
-		  allDay: 'false',
-		  title: training.activity,
-		  start: training.date,
-		  end: training.date + moment().add(training.duration, 'minutes'),
-		  resource: training.customer.firstname
+	const events = trainings.map((training) =>
+		Calendar.events = {
+		allDay: 'false',
+		title: training.activity,
+		start: training.date,
+		end: training.date + moment().add(training.duration, 'minutes'),
+		resource: training.customer.firstname
 		}
 	);
 	console.log('events:', events);
 
     return (
-        <Calendar 
+        <Calendar
         localizer={localizer}
 		events={events}
-		allDayAccessor="allDay"
-		titleAccessor='title'
-		resourceAccessor='resource'
+		resourceTitleAccessor='resource'
         startAccessor='start'
         endAccessor='end'
         views={['month', 'week', 'day']}

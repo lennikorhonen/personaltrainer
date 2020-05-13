@@ -69,7 +69,7 @@ export default function Bars() {
             <ListItemText primary='Trainings' />
           </ListItem>
           <ListItem button component={Link} to='/calendar' onClick={() => Calendar} >
-            <ListItemIcon><AccountBoxIcon /></ListItemIcon>
+            <ListItemIcon><TodayIcon /></ListItemIcon>
             <ListItemText primary='Calendar' />
           </ListItem>
           <Divider />
@@ -83,7 +83,7 @@ export default function Bars() {
         <Route exact path='/' component={Customerlist}/>
         <Route path='/trainings' component={Traininglist} />
         <Route path='/calendar' component={Calendar} />
-		<Route path='/statistics' component={Statistics} />
+		    <Route path='/statistics' component={Statistics} />
       </Switch>
       </BrowserRouter>
         </div>
