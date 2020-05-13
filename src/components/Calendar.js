@@ -15,25 +15,21 @@ export default function TrainingCalendar() {
     const getTrainings = () => {
       fetch('https://customerrest.herokuapp.com/gettrainings')
         .then(response => response.json())
-        .then(data => setTrainings(data))
+        .then(data => setTrainings(data.map((training) =>(
+			{
+			  title: training.activity,
+			  start: moment.utc(training.date)._d,
+			  end: moment.utc(training.date).add(trainings.duration, 'minutes')._d,
+			  resource: training.customer.firstname
+			})
+		  )))
         .catch(err => console.error(err))
 	}
-
-	const events = trainings.map((training) =>
-		Calendar.events = {
-		allDay: 'false',
-		title: training.activity,
-		start: training.date,
-		end: training.date + moment().add(training.duration, 'minutes'),
-		resource: training.customer.firstname
-		}
-	);
-	console.log('events:', events);
 
     return (
         <Calendar
         localizer={localizer}
-		events={events}
+		events={trainings}
 		resourceTitleAccessor='resource'
         startAccessor='start'
         endAccessor='end'

@@ -12,24 +12,22 @@ export default function Statistics() {
       const getTrainings = () => {
         fetch('https://customerrest.herokuapp.com/gettrainings')
           .then(response => response.json())
-          .then(data => setTrainings(data))
+          .then(data => setTrainings(lodash(data).groupBy('activity').map(function(duartion, activity) {
+              return {
+                  name: activity,
+                  duration: lodash.sumBy(duartion, 'duartion')
+              };
+          }).value()))
           .catch(err => console.error(err))
       }
 
-      const data = lodash(trainings).groupBy('activity').map(function(items, activity) {
-          return {
-              name: activity,
-              duration: lodash.sumBy(items, 'duration')
-          };
-      }).value()
-
-      console.log(data);
+      console.log(trainings)
 
     return(
         <BarChart
         width={1250}
         height={500}
-        data={data}
+        data={trainings}
         margin={{ top: 15, right: 25, left: 10, bottom: 5 }}
       >
         <XAxis dataKey="name" />
